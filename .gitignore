@@ -38,8 +38,6 @@ build/
 dist/
 *.egg-info/
 
-# Ignorer le fichier Sqlite
-db.sqlite3
 
 # Ignorer les dossiers spécifiques
 
