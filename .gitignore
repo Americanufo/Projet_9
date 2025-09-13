@@ -39,7 +39,9 @@ dist/
 *.egg-info/
 
 
-# Ignorer les dossiers spécifiques
+# Ignorer images
+*.jpg
+*.jpeg
 
 # Ignorer tous les fichiers .zip
 *.zip

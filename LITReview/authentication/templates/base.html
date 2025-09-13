@@ -1,102 +1,31 @@
 <!DOCTYPE html>
-<html>
+{% load static %}
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <title>LITReview</title>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            background: #fff;
-            width: 100vw;
-            height: 100vh;
-        }
-        .main-frame {
-            margin: 2vw auto;
-            width: 92vw;
-            max-width: 1100px;
-            min-height: 88vh;           
-            border: 2px solid #222;
-            box-sizing: border-box;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-        }
-        .header-title {
-            text-align: center;
-            font-size: 26px;
-            font-weight: normal;
-            margin-top: 18px;
-            margin-bottom: 0px;
-        }
-        .header-bar {
-            border: none;
-            border-top: 2px solid #222;
-            margin: 2px 0 35px 0;
-        }
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: flex-start;
-            width: 97%;
-            margin: 0 auto;
-            flex: 1;
-        }
-        .block {
-            width: 44%;
-            min-width: 320px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .block h2 {
-            font-size: 19px;
-            font-weight: normal;
-            margin-bottom: 15px;    
-            margin-top: 55px;
-        }
-        .block form {
-            margin-top: 6px;        
-            width: 60%;
-        }
-        input[type="text"], input[type="password"] {
-            width: 97%;
-            padding: 8px;
-            margin-bottom: 17px;
-            font-size: 16px;
-            border: 1px solid #333;
-            border-radius: 2px;
-            background: none;
-            box-sizing: border-box;
-        }
-        .btn-row {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-        }
-        button {
-            padding: 7px 24px;
-            font-size: 16px;
-            border: 1px solid #333;
-            background: white;
-            border-radius: 3px;
-            cursor: pointer;
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <div class="main-frame">
-        <div class="header-title">LITReview</div>
-        <hr class="header-bar">
+    <!-- Encadré principal-->
+    <div class="page-frame">
+        <!-- Barre d'en-tête avec menu -->
+        <header class="top-bar">
+            <div class="header-center">
+                <h1 class="page-title">LITReview</h1>
+            </div>
+            {% if user.is_authenticated %}
+            <nav class="main-menu">
+                <a href="{% url 'home' %}">Flux</a>
+                <a href="{% url 'ticket_list' %}">Posts</a>
+                <a href="#">Abonnements</a>
+                <a href="{% url 'logout' %}" class="logout-link">Se déconnecter</a>
+            </nav>
+            {% endif %}
+        </header>
+        <hr class="title-bar"/>
+        
         {% block content %}{% endblock content %}
-        {% if user.is_authenticated %}
-            <p style="text-align: center;">
-                Vous êtes connecté en tant que {{ request.user }}.
-                <a href="{% url 'logout' %}">Se déconnecter</a>
-            </p>
-        {% endif %}
     </div>
 </body>
 </html>

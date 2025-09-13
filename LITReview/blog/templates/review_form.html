@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2 class="form-title">{% if ticket or review %}Modifier{% else %}Créer{% endif %} {{ ticket|default:"le billet" }}{{ review|default:"" }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="submit-btn">{% if ticket or review %}Modifier{% else %}Envoyer{% endif %}</button>
+</form>
+
+<a href="{% if ticket %}{% url 'ticket_detail' ticket.pk %}{% else %}{% url 'ticket_list' %}{% endif %}">Annuler</a>
+
+{% endblock %}

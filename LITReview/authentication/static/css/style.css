@@ -1,0 +1,308 @@
+/* Corps principal */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #222;
+}
+
+
+/* Encadré principal, prend toute la hauteur et contient tout le contenu */
+.page-frame {
+    border: 3px solid #555;
+    max-width: 1100px;
+    min-height: 95vh; /* pour occuper presque toute la hauteur écran */
+    margin: 0 auto; /* cadré dès le haut, centré horizontalement */
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+
+/* Barre supérieure alignée avec menu à droite et titre centré */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 50px;
+    background-color: #fff;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+/* Le titre principal centré dans l'en-tête */
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Titre principal SANS bordure */
+.page-title {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.25em;
+    background: #fff;
+    text-align: center;
+}
+
+/* Menu horizontal à droite */
+.main-menu {
+    display: flex;
+    gap: 28px;
+}
+
+.main-menu a {
+    color: #222;
+    text-decoration: none;
+    font-weight: normal;
+    font-size: 1em;
+}
+
+.main-menu a.logout-link {
+    color: purple;
+    font-weight: bold;
+}
+
+.main-menu a:hover {
+    text-decoration: underline;
+}
+
+
+/* En-tête classique (pour historiques) */
+.header-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 32px;
+}
+
+
+/* Barre horizontale juste sous le titre, reliant les bords du cadre */
+.title-bar {
+    width: 100%;
+    height: 3px;
+    background: #555;
+    border: none;
+    margin-bottom: 40px;
+}
+
+
+/* Sous-titres */
+h2 {
+    font-size: 1.4em;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+
+
+/* Contenant des blocs de connexion-inscription */
+.connexion-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px; /* espace entre les blocs */
+    width: 100%;
+    margin-top: 36px;
+}
+
+
+/* Blocs pour login et signup - réduits */
+.signup-block, .login-block {
+    background: #fff;
+    border: 2px solid #090808;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 26px 22px;          /* padding vertical/horizontal réduit */
+    min-width: 270px;            /* largeur minimale plus petite */
+    max-width: 320px;            /* largeur maximale plus petite */
+    text-align: center;
+}
+
+
+
+/* Champs de formulaire */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 350px;
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="email"], 
+textarea {
+    width: 220px;                
+    height: 32px;
+    padding: 6px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Pour formulaire ticket/review étendu */
+.ticket-form, .review-form {
+    max-width: 600px;
+    margin: auto;
+    padding: 24px;
+    background: #fafafa;
+    border: 2px solid #231d1d;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Groupes de champs pour formulaires étendus */
+.form-group {
+    margin-bottom: 28px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 6px 10px;
+    border: 2px solid #AAA;
+    border-radius: 6px;
+    margin-top: 2px;
+    box-sizing: border-box;
+}
+
+/* Bouton Envoyer */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-btn {
+    padding: 7px 20px;
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #333;
+    color: #fff;
+}
+
+/* Boutons classiques */
+button {
+    width: 110px;                
+    height: 35px;
+    font-size: 1em;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+
+button:hover {
+    background-color: #eaeaea;
+}
+
+
+.signup-link {
+    text-decoration: none;
+}
+
+
+/* Message de connexion/déconnexion, alerte ou infos */
+p {
+    text-align: center;
+    font-size: 1em;
+    margin: 16px 0;
+}
+
+
+/* Centrer le titre du formulaire d'inscription */
+.form-title {
+    text-align: center;
+    margin-bottom: 17px;
+}
+
+
+/* Pour rendre responsive si écran réduit */
+@media (max-width: 1000px) {
+    .page-frame {
+        max-width: 98vw;
+    }
+    .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+        min-height: 80px;
+    }
+    .header-center {
+        justify-content: center;
+    }
+    .main-menu {
+        justify-content: flex-end;
+        gap: 18px;
+        margin-top: 8px;
+    }
+    .connexion-container {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+    }
+    .signup-block, .login-block {
+        min-width: 180px;
+        width: 84vw;
+        max-width: 84vw;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="email"], 
+    textarea {
+        width: 96vw;
+    }
+}
+
+/* Posts */
+
+.ticket-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.ticket-btn, .ticket-actions button {
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 7px 18px;
+    background: #fafafa;
+    font-size: 1em;
+    cursor: pointer;
+    text-decoration: none;
+    color: #222;
+}
+
+.ticket-btn:hover, .ticket-actions button:hover {
+    background: #eaeaea;
+    color: #111;
+}

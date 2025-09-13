@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="page-section-title">Vos posts</h2>
+<ul class="ticket-list">
+    {% for ticket in tickets %}
+    <li class="ticket-item">
+        <strong>{{ ticket.title }}</strong>
+        <div>{{ ticket.description }}</div>
+        <div>Publié le {{ ticket.time_created|date:"d/m/Y H:i" }}</div>
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="Image billet" style="max-width:120px">
+        {% endif %}
+
+        <div class="ticket-actions">
+            <a href="{% url 'ticket_update' ticket.pk %}" class="ticket-btn">Modifier</a>
+            <form action="{% url 'ticket_delete' ticket.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="ticket-btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+            </form>
+        </div>
+    </li>
+    {% empty %}
+    <li>Aucun post trouvé.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
