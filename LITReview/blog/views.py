@@ -2,13 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.views.decorators.http import require_POST
+from itertools import chain
+from operator import attrgetter
 from .models import Ticket, Review
 from .forms import TicketForm, ReviewForm
-
-# --- Vue de la page d'accueil (fil d’actualité) ---
-@login_required
-def home(request):
-    return render(request, 'home.html')
 
 # --- Liste des billets (tickets) ---
 @login_required
@@ -109,3 +106,19 @@ def review_delete(request, pk):
     ticket_pk = review.ticket.pk
     review.delete()
     return redirect('ticket_detail', pk=ticket_pk)
+
+# On récupère les critiques ordonnées de la plus récente à la plus ancienne sur la page des flux
+@login_required
+def home(request):
+    tickets = Ticket.objects.select_related('user').all()
+    reviews = Review.objects.select_related('user', 'ticket').all()
+
+    posts = list(chain(tickets, reviews))
+
+    # Ajout d'une propriété temporaire 'post_type' pour chaque élément
+    for p in posts:
+        p.post_type = 'ticket' if isinstance(p, Ticket) else 'review'
+
+    posts.sort(key=attrgetter('time_created'), reverse=True)
+
+    return render(request, 'home.html', {'posts': posts})

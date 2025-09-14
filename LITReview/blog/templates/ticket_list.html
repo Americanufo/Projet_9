@@ -2,26 +2,30 @@
 
 {% block content %}
 <h2 class="page-section-title">Vos posts</h2>
-<ul class="ticket-list">
+<div class="posts-list">
     {% for ticket in tickets %}
-    <li class="ticket-item">
-        <strong>{{ ticket.title }}</strong>
-        <div>{{ ticket.description }}</div>
-        <div>Publié le {{ ticket.time_created|date:"d/m/Y H:i" }}</div>
+    <div class="post-encadre">
+        <div class="post-ligne-haut">
+            <span class="post-type">Vous avez publié un ticket</span>
+            <span class="post-date">{{ ticket.time_created|date:"H:i, d F Y" }}</span>
+        </div>
+        <div class="post-titre"><strong>{{ ticket.title }}</strong></div>
+        <div class="post-desc">{{ ticket.description }}</div>
         {% if ticket.image %}
-            <img src="{{ ticket.image.url }}" alt="Image billet" style="max-width:120px">
+        <div class="post-image">
+            <img src="{{ ticket.image.url }}" alt="Image billet" class="ticket-image">
+        </div>
         {% endif %}
-
-        <div class="ticket-actions">
+        <div class="post-btn-row">
             <a href="{% url 'ticket_update' ticket.pk %}" class="ticket-btn">Modifier</a>
             <form action="{% url 'ticket_delete' ticket.pk %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" class="ticket-btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+                <button type="submit" class="ticket-btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
             </form>
         </div>
-    </li>
+    </div>
     {% empty %}
-    <li>Aucun post trouvé.</li>
+    <div>Aucun post trouvé.</div>
     {% endfor %}
-</ul>
+</div>
 {% endblock %}
