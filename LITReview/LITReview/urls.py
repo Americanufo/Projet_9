@@ -52,11 +52,13 @@ urlpatterns = [
     path('tickets/<int:pk>/', blog.views.ticket_detail, name='ticket_detail'),
     path('tickets/<int:pk>/edit/', blog.views.ticket_update, name='ticket_update'),
     path('tickets/<int:pk>/delete/', blog.views.ticket_delete, name='ticket_delete'),
+    
 
     # --- URLs pour la gestion des commentaires (reviews) ---
     path('tickets/<int:ticket_pk>/reviews/new/', blog.views.review_create, name='review_create'),
     path('reviews/<int:pk>/edit/', blog.views.review_update, name='review_update'),
     path('reviews/<int:pk>/delete/', blog.views.review_delete, name='review_delete'),
+    path('create-review/', blog.views.create_review, name='review_create'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

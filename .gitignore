@@ -42,6 +42,7 @@ dist/
 # Ignorer images
 *.jpg
 *.jpeg
+*.webp
 
 # Ignorer tous les fichiers .zip
 *.zip

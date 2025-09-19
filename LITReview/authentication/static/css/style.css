@@ -329,11 +329,14 @@ p {
     margin-right: -10px;
 }
 
+.post-actions-row {
+    display: flex;
+}
+
 .ticket-btn,
 .post-btn-row button {
     border: 1px solid #555;
     border-radius: 5px;
-    padding: 8px 32px;
     background: #fafafa;
     font-size: 1em;
     cursor: pointer;
@@ -344,10 +347,120 @@ p {
     box-sizing: border-box;
     margin: 0;
     text-align: center;
+    display: grid;
+    place-items: center;
 }
 
 .ticket-btn:hover,
 .post-btn-row button:hover {
     background: #eaeaea;
     color: #111;
+}
+
+/* Section spécifique à la page home */
+.page-home .home-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 38px;
+    margin-bottom: 38px;
+    margin-top: 18px;
+}
+
+.page-home .home-btn,
+.page-home .big-home-btn {
+    padding: 22px 72px;
+    font-size: 1.33em;
+    border-radius: 12px;
+    border: 2.2px solid #555;
+    background: #fafafa;
+    min-width: 270px;
+    max-width: 380px;
+    cursor: pointer;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    transition: background 0.15s, color 0.15s;  
+    display: inline-block;
+    box-sizing: border-box;
+    line-height: 1.11;
+}
+
+.page-home .home-btn:disabled,
+.page-home .big-home-btn:disabled {
+    color: #bbb !important;
+    background: #eee !important;
+    cursor: not-allowed !important;
+}
+
+.page-home .home-btn:not(:disabled):hover,
+.page-home .big-home-btn:not(:disabled):hover {
+    background: #eaeaea;
+    color: #222;
+}
+
+
+/* Création de critique */
+
+.form-section {
+    border: 1.8px solid #222;
+    border-radius: 9px;
+    padding: 16px 22px 22px 22px;
+    margin-bottom: 30px;
+}
+
+.form-section legend {
+    font-weight: normal;
+    font-size: 1.1em;
+    padding: 0 8px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+    width: 100%;
+    max-width: 620px;
+    padding: 6px 10px;
+    font-size: 1em;
+    border: 2px solid #AAA;
+    border-radius: 7px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+.form-group input[type="radio"] {
+    margin-left: 15px;
+    margin-right: 3px;
+}
+
+.form-actions {
+    text-align: right;
+    margin-top: 14px;
+}
+
+.submit-btn {
+    padding: 8px 28px;
+    font-weight: bold;
+    font-size: 1em;
+    border-radius: 8px;
+    border: 2px solid #333;
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #e1e1e1;
 }
