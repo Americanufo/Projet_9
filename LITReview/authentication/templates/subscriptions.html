@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Suivre d'autres utilisateurs</h3>
+
+<form method="post" class="subscription-form">
+    {% csrf_token %}
+    {{ form.username }}
+    <button type="submit">Envoyer</button>
+</form>
+
+{% if follow_error %}
+    <div class="form-error">{{ follow_error }}</div>
+{% endif %}
+
+<h4>Abonnements</h4>
+<table class="subscriptions-table">
+    {% for follow in abonnements %}
+    <tr>
+        <td>{{ follow.followed_user.username }}</td>
+        <td>
+            <form method="post" action="{% url 'authentication:unfollow' follow.followed_user.id %}">
+                {% csrf_token %}
+                <button type="submit">Désabonner</button>
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="2">Aucun abonnement.</td></tr>
+    {% endfor %}
+</table>
+
+<h4>Abonnés</h4>
+<table class="subscriptions-table">
+    {% for follow in abonnes %}
+    <tr>
+        <td>{{ follow.user.username }}</td>
+    </tr>
+    {% empty %}
+    <tr><td>Aucun abonné.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

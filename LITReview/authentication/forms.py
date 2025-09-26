@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model  # Importer get_user_model
 
+
 User = get_user_model()  # Récupérer le modèle utilisateur 
+
 
 class SignupForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -11,6 +13,15 @@ class SignupForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Personnalisation des placeholders pour les champs d'inscription
         self.fields['username'].widget.attrs.update({'placeholder': "Nom d'utilisateur"})
         self.fields['password1'].widget.attrs.update({'placeholder': "Mot de passe"})
         self.fields['password2'].widget.attrs.update({'placeholder': "Confirmer mot de passe"})
+
+
+class FollowUserForm(forms.Form):
+    username = forms.CharField(label="Nom d'utilisateur", max_length=150)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'placeholder': "Nom d'utilisateur"})

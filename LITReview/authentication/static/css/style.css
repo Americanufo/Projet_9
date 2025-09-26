@@ -406,7 +406,14 @@ p {
     border-radius: 9px;
     padding: 16px 22px 22px 22px;
     margin-bottom: 30px;
+    width: 430px;
+    min-width: 360px;
+    max-width: 96vw;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 
 .form-section legend {
     font-weight: normal;
@@ -451,8 +458,26 @@ p {
     margin-top: 14px;
 }
 
+.form-group.rating {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+.form-group.rating label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0;
+    margin-right: 6px;
+    gap: 4px;
+}
+.form-group.rating input[type="radio"] {
+    margin: 0 3px 0 0;
+}
+
+
 .submit-btn {
-    padding: 8px 28px;
     font-weight: bold;
     font-size: 1em;
     border-radius: 8px;
@@ -463,4 +488,30 @@ p {
 
 .submit-btn:hover {
     background-color: #e1e1e1;
+}
+
+/* Abonnement */
+
+.subscriptions-table {
+    width: 80%;
+    margin: 1em auto 2em auto;
+    border-collapse: collapse;
+}
+.subscriptions-table td, .subscriptions-table th {
+    border: 1px solid #222;
+    padding: 9px 14px;
+}
+.subscription-form {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 35px;
+}
+.form-error {
+    color: #d00;
+    text-align: center;
+    margin: 1em 0 2em 0;
+}
+button {
+    cursor: pointer;
 }

@@ -123,16 +123,18 @@ def home(request):
 
     return render(request, 'home.html', {'posts': posts})
 
-# Création d'un article @login_required
-def create_review(request):
+# Création d'un article 
+@login_required
+def create_review(request, pk):
+    ticket = get_object_or_404(Ticket, pk=pk)
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST, request.FILES)
         review_form = ReviewForm(request.POST)
 
         if ticket_form.is_valid() and review_form.is_valid():
-            ticket = ticket_form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
+            new_ticket = ticket_form.save(commit=False)
+            new_ticket.user = request.user
+            new_ticket.save()
 
             review = review_form.save(commit=False)
             review.user = request.user
@@ -147,4 +149,7 @@ def create_review(request):
     return render(request, 'review_create.html', {
         'ticket_form': ticket_form,
         'review_form': review_form,
+        'ticket' : ticket,
     })
+
+    
