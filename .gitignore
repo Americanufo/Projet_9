@@ -38,12 +38,6 @@ build/
 dist/
 *.egg-info/
 
-
-# Ignorer images
-*.jpg
-*.jpeg
-*.webp
-
 # Ignorer tous les fichiers .zip
 *.zip
 

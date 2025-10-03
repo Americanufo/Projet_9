@@ -217,7 +217,6 @@ textarea {
 /* Boutons classiques */
 
 button {
-    width: 110px;
     height: 35px;
     font-size: 1em;
     border: 1px solid #555;
@@ -282,6 +281,7 @@ p {
 .post-type {
     font-size: 1em;
     font-weight: normal;
+    margin-bottom: 6px;
 }
 
 .post-date {
@@ -290,20 +290,27 @@ p {
     text-align: right;
     min-width: 140px;
     margin-left: 18px;
+    margin-bottom: 6px;
 }
 
 /* Titre */
 .post-titre {
-    font-size: 1.09em;
+    font-size: 1.13em;
     font-weight: bold;
-    margin-bottom: 9px;
+    margin-bottom: 10px;
+}
+
+.post-title {
+    font-size: 1.13em;
+    font-weight: bold;
+    margin-bottom: 12px; /* Ajoute un espace sous le titre */
 }
 
 /* Description */
 .post-desc {
     font-size: 1em;
     color: #222;
-    margin-bottom: 13px;
+    margin-bottom: 16px;
     word-break: break-word;
 }
 
@@ -323,14 +330,29 @@ p {
 /* Boutons alignés à droite, même taille */
 .post-btn-row {
     display: flex;
-    gap: 16px;
-    justify-content: flex-end;
-    margin-top: 5px;
-    margin-right: -10px;
+    gap: 18px;
+    justify-content: flex-start;   
+    align-items: center;
+    margin-top: 20px;               
+    margin-bottom: 4px;
+}
+
+.post-btn-row form {
+    width: auto !important;
+    max-width: none !important;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .post-actions-row {
     display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+    margin-bottom: 4px; 
+    padding-right: 6px; 
+    gap: 12px; 
 }
 
 .ticket-btn,
@@ -357,14 +379,28 @@ p {
     color: #111;
 }
 
+/* Bouton créer une critique */
+.ticket-btn.right {
+    float: right;
+    margin-right: 18px; /* espace confortable à droite */
+    margin-top: 3px;    /* ajuste aussi l'alignement vertical si besoin */
+    margin-left: auto;
+    padding: 7px 10px;
+}
+
 /* Section spécifique à la page home */
 .page-home .home-buttons-container {
     display: flex;
     justify-content: center;
-    gap: 38px;
+    gap: 70px;
     margin-bottom: 38px;
     margin-top: 18px;
 }
+
+.home-buttons-container form + form {
+    margin-left: 130px;   /* ajuste selon besoin (ex : 40px ou plus) */
+}
+
 
 .page-home .home-btn,
 .page-home .big-home-btn {
@@ -490,6 +526,10 @@ p {
     background-color: #e1e1e1;
 }
 
+#id_rating {
+    display:flex;
+}
+
 /* Abonnement */
 
 .subscriptions-table {
@@ -515,3 +555,4 @@ p {
 button {
     cursor: pointer;
 }
+

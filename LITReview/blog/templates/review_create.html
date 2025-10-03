@@ -2,41 +2,48 @@
 
 {% block content %}
 <h2>Créer une critique</h2>
-<div>
-    {% if ticket %}
-        <h1>{{ ticket.title }}</h1>
-    <p>Par {{ ticket.user }} le {{ ticket.time_created|date:"d/m/Y H:i" }}</p>
-    {% if ticket.image %}
-        <img src="{{ ticket.image.url }}" alt="Image pour {{ ticket.title }}" class="ticket-image" />
-    {% endif %}
-    <p>{{ ticket.description }}</p>
 
-    <hr>
-
-    <h2>Commentaires</h2>
-    <ul class="review-list">
-        {% for review in reviews %}
-        <li class="review-item">
-            <strong>{{ review.headline }}</strong> - note : {{ review.rating }}/5<br />
-            <p>{{ review.body }}</p>
-            <p>Par {{ review.user }} le {{ review.time_created|date:"d/m/Y H:i" }}</p>
-            {% if review.user == request.user %}
-                <a href="{% url 'review_update' review.pk %}">Modifier</a> |
-                <form action="{% url 'review_delete' review.pk %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Confirmez-vous la suppression ?');">Supprimer</button>
-                </form>
+{% if ticket %}
+    <div class="form-section">
+        <div class="ticket-request-header">
+            Vous êtes en train de poster en réponse à
+        </div>
+        <div class="post-encadre">
+            <div class="post-ligne-haut">
+                <span>{{ ticket.user.username }} a demandé une critique</span>
+                <span class="post-date">{{ ticket.time_created|date:"H:i, d M Y" }}</span>
+            </div>
+            <div class="post-titre">{{ ticket.title }}</div>
+            <div class="post-desc">{{ ticket.description }}</div>
+            {% if ticket.image %}
+                <div class="post-image">
+                    <img src="{{ ticket.image.url }}" alt="Image pour {{ ticket.title }}" class="ticket-image" />
+                </div>
             {% endif %}
-        </li>
-        {% empty %}
-        <li>Pas encore de commentaires.</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="review-form">
+        {% csrf_token %}
+        <div class="form-title">Critique</div>
+        <div class="form-group">
+            {{ review_form.headline.label_tag }}
+            {{ review_form.headline }}
+        </div>
+        <div class="form-group rating">
+            {{ review_form.rating.label_tag }}
+            {{ review_form.rating }}
+        </div>
+        <div class="form-group">
+            {{ review_form.body.label_tag }}
+            {{ review_form.body }}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">Envoyer</button>
+        </div>
+    </form>
+{% else %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-
         <fieldset class="form-section">
             <legend>Livre / Article</legend>
             <div class="form-group">
@@ -52,7 +59,6 @@
                 {{ ticket_form.image }}
             </div>
         </fieldset>
-
         <fieldset class="form-section">
             <legend>Critique</legend>
             <div class="form-group">
@@ -68,10 +74,9 @@
                 {{ review_form.body }}
             </div>
         </fieldset>
-
         <div class="form-actions">
             <button type="submit" class="submit-btn">Envoyer</button>
         </div>
     </form>
-</div>
+{% endif %}
 {% endblock %}

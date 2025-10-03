@@ -3,29 +3,105 @@
 {% block content %}
 <h2 class="page-section-title">Vos posts</h2>
 <div class="posts-list">
-    {% for ticket in tickets %}
+    {% for post in posts %}
     <div class="post-encadre">
         <div class="post-ligne-haut">
-            <span class="post-type">Vous avez publié un ticket</span>
-            <span class="post-date">{{ ticket.time_created|date:"H:i, d F Y" }}</span>
+            <span class="post-type">
+                {% if post.post_type == 'ticket' %}
+                    Vous avez publié un ticket
+                {% else %}
+                    Vous avez publié une critique
+                {% endif %}
+            </span>
+            <span class="post-date">{{ post.time_created|date:"H:i, d F Y" }}</span>
         </div>
-        <div class="post-titre"><strong>{{ ticket.title }}</strong></div>
-        <div class="post-desc">{{ ticket.description }}</div>
-        {% if ticket.image %}
+        <div class="post-titre">
+            {% if post.post_type == 'ticket' %}
+                <strong>{{ post.title }}</strong>
+            {% else %}
+                {{ post.headline }} – 
+                {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= post.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="post-desc">
+            {% if post.post_type == 'ticket' %}
+                {{ post.description }}
+            {% else %}
+                {{ post.body }}
+            {% endif %}
+        </div>
+        {% if post.post_type == 'ticket' and post.image %}
         <div class="post-image">
-            <img src="{{ ticket.image.url }}" alt="Image billet" class="ticket-image">
+            <img src="{{ post.image.url }}" alt="Image billet" class="ticket-image">
+        </div>
+        {% elif post.post_type == 'review' and post.image %}
+        <div class="post-image">
+            <img src="{{ post.image.url }}" alt="Image critique" class="ticket-image">
         </div>
         {% endif %}
         <div class="post-btn-row">
-            <a href="{% url 'ticket_update' ticket.pk %}" class="ticket-btn">Modifier</a>
-            <form action="{% url 'ticket_delete' ticket.pk %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="ticket-btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
-            </form>
+            {% if post.post_type == 'ticket' %}
+                <a href="{% url 'ticket_update' post.pk %}" class="ticket-btn">Modifier</a>
+                <form action="{% url 'ticket_delete' post.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="ticket-btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+                </form>
+            {% elif post.user == user %}
+                <a href="{% url 'review_update' post.pk %}" class="ticket-btn">Modifier</a>
+                <form action="{% url 'review_delete' post.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="ticket-btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+                </form>
+            {% endif %}
         </div>
+        {% if post.post_type == 'review' and post.ticket %}
+        <div class="post-encadre">
+            <div class="post-ligne-haut">
+                <span>Ticket - {{ post.ticket.user.username }}</span>
+            </div>
+            <div class="post-titre"><strong>{{ post.ticket.title }}</strong></div>
+            <div class="post-desc">{{ post.ticket.description }}</div>
+            {% if post.ticket.image %}
+            <div class="post-image">
+                <img src="{{ post.ticket.image.url }}" alt="Image billet" class="ticket-image">
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% if post.post_type == 'ticket' %}
+            {% for review in post.review_set.all %}
+            <div class="post-encadre">
+                <div class="post-ligne-haut">
+                    <span class="post-type">{{ review.user.username }} a publié une critique</span>
+                    <span class="post-date">{{ review.time_created|date:"H:i, d F Y" }}</span>
+                </div>
+                <div class="post-title">
+                    {{ review.headline }} – 
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                </div>
+                <div class="post-desc">{{ review.body }}</div>
+                {% if review.image %}
+                <div class="post-image">
+                    <img src="{{ review.image.url }}" alt="Image critique" class="ticket-image">
+                </div>
+                {% endif %}
+                {% if review.user == user %}
+                <div class="post-btn-row">
+                    <a href="{% url 'review_update' review.pk %}" class="ticket-btn">Modifier</a>
+                    <form action="{% url 'review_delete' review.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="ticket-btn" onclick="return confirm('Confirmer la suppression ?');">Supprimer</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% endif %}
     </div>
-    {% empty %}
-    <div>Aucun post trouvé.</div>
     {% endfor %}
 </div>
 {% endblock %}

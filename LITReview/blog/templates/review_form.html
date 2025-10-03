@@ -1,15 +1,53 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
-<h2 class="form-title">{% if ticket or review %}Modifier{% else %}Créer{% endif %} {{ ticket|default:"le billet" }}{{ review|default:"" }}</h2>
+<h2 class="form-title">
+    {% if review %}Modifier{% else %}Créer{% endif %} une critique
+    {% if ticket %}pour "{{ ticket.title }}"{% endif %}
+</h2>
 
-<form method="post" enctype="multipart/form-data">
+{% if ticket %}
+    <div class="form-section">
+        <div class="ticket-request-header">
+            Vous êtes en train de poster en réponse à
+        </div>
+        <div class="post-encadre">
+            <div class="post-ligne-haut">
+                <span>{{ ticket.user.username }} a demandé une critique</span>
+                <span class="post-date">{{ ticket.time_created|date:"H:i, d M Y" }}</span>
+            </div>
+            <div class="post-titre">{{ ticket.title }}</div>
+            <div class="post-desc">{{ ticket.description }}</div>
+            {% if ticket.image %}
+                <div class="post-image">
+                    <img src="{{ ticket.image.url }}" alt="Image pour {{ ticket.title }}" class="ticket-image" />
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data" class="form-section review-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="submit-btn">{% if ticket or review %}Modifier{% else %}Envoyer{% endif %}</button>
+    <div class="form-title">Critique</div>
+    <div class="form-group">
+        {{ form.headline.label_tag }}
+        {{ form.headline }}
+    </div>
+    <div class="form-group rating">
+        {{ form.rating.label_tag }}
+        {{ form.rating }}
+    </div>
+    <div class="form-group">
+        {{ form.body.label_tag }}
+        {{ form.body }}
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="submit-btn">
+            {% if review %}Modifier{% else %}Envoyer{% endif %}
+        </button>
+    </div>
 </form>
 
 <a href="{% if ticket %}{% url 'ticket_detail' ticket.pk %}{% else %}{% url 'ticket_list' %}{% endif %}">Annuler</a>
-
 {% endblock %}

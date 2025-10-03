@@ -1,17 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from authentication.models import UserFollows
 from django.http import HttpResponseForbidden
 from django.views.decorators.http import require_POST
+from django.db.models import Prefetch
 from itertools import chain
 from operator import attrgetter
 from .models import Ticket, Review
 from .forms import TicketForm, ReviewForm
 
-# --- Liste des billets (tickets) ---
+# --- Liste des posts ---
 @login_required
 def ticket_list(request):
-    tickets = Ticket.objects.filter(user=request.user)
-    return render(request, 'ticket_list.html', {'tickets': tickets})
+    tickets = Ticket.objects.filter(user=request.user).prefetch_related(
+        Prefetch('review_set', queryset=Review.objects.all())
+    )
+    my_reviews = Review.objects.filter(user=request.user)
+    posts = list(chain(tickets, my_reviews))
+    posts.sort(key=attrgetter('time_created'), reverse=True)
+    for p in posts:
+        p.post_type = 'ticket' if isinstance(p, Ticket) else 'review'
+    return render(request, 'ticket_list.html', {'posts': posts, 'user': request.user})
 
 # --- Détail d’un billet et ses commentaires ---
 @login_required
@@ -29,7 +38,7 @@ def ticket_create(request):
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-            return redirect('ticket_detail', pk=ticket.pk)
+            return redirect('home')
     else:
         form = TicketForm()
     return render(request, 'ticket_form.html', {'form': form})
@@ -47,7 +56,7 @@ def ticket_update(request, pk):
         if form.is_valid():
             form.save()
             print(f"Ticket modifié: {ticket.pk}")
-            return redirect('ticket_detail', pk=ticket.pk)
+            return redirect('home')
         else:
             print("Formulaire invalide:", form.errors)
     else:
@@ -63,7 +72,7 @@ def ticket_delete(request, pk):
     if ticket.user != request.user:
         return HttpResponseForbidden("Vous ne pouvez pas supprimer ce billet.")
     ticket.delete()
-    return redirect('ticket_list')
+    return redirect('home')
 
 # --- Création d’un commentaire sur un billet ---
 @login_required
@@ -76,7 +85,7 @@ def review_create(request, ticket_pk):
             review.user = request.user
             review.ticket = ticket
             review.save()
-            return redirect('ticket_detail', pk=ticket.pk)
+            return redirect('home')
     else:
         form = ReviewForm()
     return render(request, 'review_form.html', {'form': form, 'ticket': ticket})
@@ -91,7 +100,7 @@ def review_update(request, pk):
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
             form.save()
-            return redirect('ticket_detail', pk=review.ticket.pk)
+            return redirect('home')
     else:
         form = ReviewForm(instance=review)
     return render(request, 'review_form.html', {'form': form, 'review': review})
@@ -105,51 +114,49 @@ def review_delete(request, pk):
         return HttpResponseForbidden("Vous ne pouvez pas supprimer ce commentaire.")
     ticket_pk = review.ticket.pk
     review.delete()
-    return redirect('ticket_detail', pk=ticket_pk)
+    return redirect('home')
 
-# On récupère les critiques ordonnées de la plus récente à la plus ancienne sur la page des flux
+# --- Flux social (home) ---
 @login_required
 def home(request):
-    tickets = Ticket.objects.select_related('user').all()
-    reviews = Review.objects.select_related('user', 'ticket').all()
-
-    posts = list(chain(tickets, reviews))
-
-    # Ajout d'une propriété temporaire 'post_type' pour chaque élément
+    # IDs des utilisateurs suivis
+    followed_ids = list(UserFollows.objects.filter(user=request.user).values_list('followed_user__id', flat=True))
+    # Billets des suivis + soi-même
+    tickets = Ticket.objects.filter(user__in=followed_ids + [request.user.id])
+    # Avis des suivis + soi-même
+    reviews_followed = Review.objects.filter(user__in=followed_ids + [request.user.id])
+    # Avis en réponse à mes propres tickets (par n'importe qui, sauf soi-même)
+    reviews_on_my_tickets = Review.objects.filter(ticket__user=request.user).exclude(user=request.user)
+    # Mélange et tri
+    posts = list(chain(tickets, reviews_followed, reviews_on_my_tickets))
+    posts.sort(key=attrgetter('time_created'), reverse=True)
     for p in posts:
         p.post_type = 'ticket' if isinstance(p, Ticket) else 'review'
-
-    posts.sort(key=attrgetter('time_created'), reverse=True)
-
-    return render(request, 'home.html', {'posts': posts})
+    return render(request, 'home.html', {'posts': posts, 'user': request.user})
 
 # Création d'un article 
 @login_required
-def create_review(request, pk):
-    ticket = get_object_or_404(Ticket, pk=pk)
+def create_review(request):
     if request.method == 'POST':
         ticket_form = TicketForm(request.POST, request.FILES)
         review_form = ReviewForm(request.POST)
-
         if ticket_form.is_valid() and review_form.is_valid():
-            new_ticket = ticket_form.save(commit=False)
-            new_ticket.user = request.user
-            new_ticket.save()
-
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
             review = review_form.save(commit=False)
             review.user = request.user
             review.ticket = ticket
             review.save()
-
-            return redirect('home')  # ou autre page de destination
+            return redirect('home')  # ou autre page
     else:
         ticket_form = TicketForm()
         review_form = ReviewForm()
-
     return render(request, 'review_create.html', {
         'ticket_form': ticket_form,
         'review_form': review_form,
-        'ticket' : ticket,
+        'ticket': None,
     })
+
 
     
