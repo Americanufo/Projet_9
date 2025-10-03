@@ -10,7 +10,7 @@ LITReview est une application Django permettant de publier des billets, écrire 
 
 - Python 3.9 ou supérieur
 - pip
-- (Optionnel) Un environnement virtuel Python (fortement recommandé)
+- Un environnement virtuel Python
 
 ---
 
