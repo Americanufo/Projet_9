@@ -119,7 +119,7 @@ h2 {
     margin-top: 36px;
 }
 
-/* Blocs pour login et signup - réduits */
+/* Blocs pour login et signup */
 
 .signup-block, .login-block {
     background: #fff;
@@ -382,8 +382,8 @@ p {
 /* Bouton créer une critique */
 .ticket-btn.right {
     float: right;
-    margin-right: 18px; /* espace confortable à droite */
-    margin-top: 3px;    /* ajuste aussi l'alignement vertical si besoin */
+    margin-right: 18px; 
+    margin-top: 3px;    
     margin-left: auto;
     padding: 7px 10px;
 }
@@ -398,7 +398,7 @@ p {
 }
 
 .home-buttons-container form + form {
-    margin-left: 130px;   /* ajuste selon besoin (ex : 40px ou plus) */
+    margin-left: 130px;   
 }
 
 

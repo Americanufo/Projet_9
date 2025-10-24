@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate, logout  # import des fonctions login et authenticate
+from django.contrib.auth import login, logout  # import des fonctions login et authenticate
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -31,7 +31,7 @@ def signup_page(request):
     return render(request, 'signup.html', context={'form': form})
 
 
-# Gestion des abonnements 
+# Gestion des abonnements
 @login_required
 def subscriptions(request):
     """

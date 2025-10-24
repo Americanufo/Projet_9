@@ -9,7 +9,10 @@ from operator import attrgetter
 from .models import Ticket, Review
 from .forms import TicketForm, ReviewForm
 
+
 # --- Liste des posts ---
+
+
 @login_required
 def ticket_list(request):
     tickets = Ticket.objects.filter(user=request.user).prefetch_related(
@@ -22,14 +25,20 @@ def ticket_list(request):
         p.post_type = 'ticket' if isinstance(p, Ticket) else 'review'
     return render(request, 'ticket_list.html', {'posts': posts, 'user': request.user})
 
+
 # --- Détail d’un billet et ses commentaires ---
+
+
 @login_required
 def ticket_detail(request, pk):
     ticket = get_object_or_404(Ticket, pk=pk)
     reviews = Review.objects.filter(ticket=ticket).order_by('-time_created')
     return render(request, 'ticket_detail.html', {'ticket': ticket, 'reviews': reviews})
 
+
 # --- Création d’un billet ---
+
+
 @login_required
 def ticket_create(request):
     if request.method == 'POST':
@@ -43,7 +52,10 @@ def ticket_create(request):
         form = TicketForm()
     return render(request, 'ticket_form.html', {'form': form})
 
+
 # --- Modification d’un billet (seulement par son auteur) ---
+
+
 @login_required
 def ticket_update(request, pk):
     print(f"ticket_update : user={request.user}, pk={pk}")
@@ -64,7 +76,10 @@ def ticket_update(request, pk):
         form = TicketForm(instance=ticket)
     return render(request, 'ticket_form.html', {'form': form, 'ticket': ticket})
 
+
 # --- Suppression d’un billet (POST uniquement, auteur unique) ---
+
+
 @login_required
 @require_POST
 def ticket_delete(request, pk):
@@ -74,7 +89,10 @@ def ticket_delete(request, pk):
     ticket.delete()
     return redirect('home')
 
+
 # --- Création d’un commentaire sur un billet ---
+
+
 @login_required
 def review_create(request, ticket_pk):
     ticket = get_object_or_404(Ticket, pk=ticket_pk)
@@ -90,7 +108,10 @@ def review_create(request, ticket_pk):
         form = ReviewForm()
     return render(request, 'review_form.html', {'form': form, 'ticket': ticket})
 
+
 # --- Modification d’un commentaire (seulement par son auteur) ---
+
+
 @login_required
 def review_update(request, pk):
     review = get_object_or_404(Review, pk=pk)
@@ -105,18 +126,23 @@ def review_update(request, pk):
         form = ReviewForm(instance=review)
     return render(request, 'review_form.html', {'form': form, 'review': review})
 
+
 # --- Suppression d’un commentaire (POST uniquement, auteur unique) ---
+
+
 @login_required
 @require_POST
 def review_delete(request, pk):
     review = get_object_or_404(Review, pk=pk)
     if review.user != request.user:
         return HttpResponseForbidden("Vous ne pouvez pas supprimer ce commentaire.")
-    ticket_pk = review.ticket.pk
     review.delete()
     return redirect('home')
 
+
 # --- Flux social (home) ---
+
+
 @login_required
 def home(request):
     # IDs des utilisateurs suivis
@@ -134,7 +160,10 @@ def home(request):
         p.post_type = 'ticket' if isinstance(p, Ticket) else 'review'
     return render(request, 'home.html', {'posts': posts, 'user': request.user})
 
-# Création d'un article 
+
+# --- Création d’un article ---
+
+
 @login_required
 def create_review(request):
     if request.method == 'POST':
@@ -157,6 +186,3 @@ def create_review(request):
         'review_form': review_form,
         'ticket': None,
     })
-
-
-    
